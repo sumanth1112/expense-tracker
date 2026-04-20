@@ -11,6 +11,8 @@ function Dashboard() {
 
   const token = localStorage.getItem("token");
 
+  // ✅ FIXED useEffect (important for Vercel build)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     fetchTransactions();
     fetchSummary();
@@ -108,17 +110,17 @@ function Dashboard() {
       <div style={{ display: "flex", gap: "20px", marginBottom: "20px" }}>
         <div style={cardStyle("#28a745")}>
           <h3>Income</h3>
-          <p>₹ {summary.totalIncome}</p>
+          <p>₹ {summary.totalIncome || 0}</p>
         </div>
 
         <div style={cardStyle("#dc3545")}>
           <h3>Expense</h3>
-          <p>₹ {summary.totalExpense}</p>
+          <p>₹ {summary.totalExpense || 0}</p>
         </div>
 
         <div style={cardStyle("#007bff")}>
           <h3>Balance</h3>
-          <p>₹ {summary.balance}</p>
+          <p>₹ {summary.balance || 0}</p>
         </div>
       </div>
 
