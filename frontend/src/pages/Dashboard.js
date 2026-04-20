@@ -11,11 +11,10 @@ function Dashboard() {
 
   const token = localStorage.getItem("token");
 
-  // ✅ FIXED useEffect (important for Vercel build)
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     fetchTransactions();
     fetchSummary();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const fetchTransactions = async () => {
@@ -84,7 +83,6 @@ function Dashboard() {
     }
   };
 
-  // 🎨 Card styles
   const cardStyle = (bg) => ({
     flex: 1,
     padding: "20px",
@@ -106,7 +104,6 @@ function Dashboard() {
     >
       <h1 style={{ textAlign: "center" }}>Expense Tracker 🚀</h1>
 
-      {/* SUMMARY */}
       <div style={{ display: "flex", gap: "20px", marginBottom: "20px" }}>
         <div style={cardStyle("#28a745")}>
           <h3>Income</h3>
@@ -124,7 +121,6 @@ function Dashboard() {
         </div>
       </div>
 
-      {/* FORM */}
       <div style={{ marginBottom: "20px" }}>
         <h3>{editId ? "Edit Transaction" : "Add Transaction"}</h3>
 
@@ -139,11 +135,7 @@ function Dashboard() {
             boxShadow: "0 2px 5px rgba(0,0,0,0.1)",
           }}
         >
-          <select
-            value={type}
-            onChange={(e) => setType(e.target.value)}
-            style={{ padding: "6px" }}
-          >
+          <select value={type} onChange={(e) => setType(e.target.value)}>
             <option value="expense">Expense</option>
             <option value="income">Income</option>
           </select>
@@ -152,44 +144,23 @@ function Dashboard() {
             placeholder="Amount"
             value={amount}
             onChange={(e) => setAmount(e.target.value)}
-            style={{ padding: "6px" }}
           />
 
           <input
             placeholder="Category"
             value={category}
             onChange={(e) => setCategory(e.target.value)}
-            style={{ padding: "6px" }}
           />
 
-          <button
-            onClick={addTransaction}
-            style={{
-              background: editId ? "#007bff" : "#28a745",
-              color: "white",
-              border: "none",
-              padding: "8px 15px",
-              borderRadius: "5px",
-              cursor: "pointer",
-            }}
-          >
+          <button onClick={addTransaction}>
             {editId ? "Update" : "Add"}
           </button>
         </div>
       </div>
 
-      {/* TABLE */}
       <h3>Transactions</h3>
 
-      <table
-        style={{
-          width: "100%",
-          borderCollapse: "collapse",
-          background: "white",
-          borderRadius: "10px",
-          overflow: "hidden",
-        }}
-      >
+      <table style={{ width: "100%", borderCollapse: "collapse" }}>
         <thead>
           <tr style={{ background: "#ddd" }}>
             <th>Type</th>
@@ -207,7 +178,6 @@ function Dashboard() {
               <td>{t.category}</td>
 
               <td>
-                {/* EDIT */}
                 <button
                   onClick={() => {
                     setEditId(t._id);
@@ -215,33 +185,15 @@ function Dashboard() {
                     setAmount(t.amount);
                     setCategory(t.category);
                   }}
-                  style={{
-                    background: "#007bff",
-                    color: "white",
-                    padding: "5px 10px",
-                    border: "none",
-                    borderRadius: "5px",
-                    marginRight: "5px",
-                    cursor: "pointer",
-                  }}
                 >
                   Edit
                 </button>
 
-                {/* DELETE */}
                 <button
                   onClick={() => {
                     if (window.confirm("Are you sure?")) {
                       deleteTransaction(t._id);
                     }
-                  }}
-                  style={{
-                    background: "#dc3545",
-                    color: "white",
-                    padding: "5px 10px",
-                    border: "none",
-                    borderRadius: "5px",
-                    cursor: "pointer",
                   }}
                 >
                   Delete
