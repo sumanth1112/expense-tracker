@@ -1,56 +1,58 @@
 import React, { useState } from "react";
 import API from "../services/api";
 
-function Login() {
+function Register() {
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleLogin = async () => {
+  const handleRegister = async () => {
     try {
-      const res = await API.post("/auth/login", { email, password });
-      localStorage.setItem("token", res.data.token);
-      window.location.href = "/dashboard";
+      await API.post("/auth/register", { name, email, password });
+      alert("User registered successfully!");
+      window.location.href = "/";
     } catch (err) {
-      alert("Invalid credentials");
+      alert("Error registering user");
     }
   };
 
   return (
     <div style={styles.container}>
       <div style={styles.card}>
-        <h2 style={{ marginBottom: "20px" }}>Login 🚀</h2>
+        <h2>Register 🚀</h2>
 
         <input
-          type="email"
-          placeholder="Enter Email"
-          value={email}
+          placeholder="Name"
+          onChange={(e) => setName(e.target.value)}
+          style={styles.input}
+        />
+
+        <input
+          placeholder="Email"
           onChange={(e) => setEmail(e.target.value)}
           style={styles.input}
         />
 
         <input
           type="password"
-          placeholder="Enter Password"
-          value={password}
+          placeholder="Password"
           onChange={(e) => setPassword(e.target.value)}
           style={styles.input}
         />
 
-        <button onClick={handleLogin} style={styles.button}>
-          Login
+        <button onClick={handleRegister} style={styles.button}>
+          Register
         </button>
 
-        {/* ✅ ADD THIS */}
         <p style={{ marginTop: "10px" }}>
-          New user?{" "}
+          Already have an account?{" "}
           <span
             style={{ color: "blue", cursor: "pointer" }}
-            onClick={() => (window.location.href = "/register")}
+            onClick={() => (window.location.href = "/")}
           >
-            Register here
+            Login
           </span>
         </p>
-
       </div>
     </div>
   );
@@ -68,7 +70,6 @@ const styles = {
     background: "white",
     padding: "30px",
     borderRadius: "10px",
-    boxShadow: "0 4px 10px rgba(0,0,0,0.2)",
     width: "300px",
     textAlign: "center",
   },
@@ -76,18 +77,14 @@ const styles = {
     width: "100%",
     padding: "10px",
     marginBottom: "10px",
-    borderRadius: "5px",
-    border: "1px solid #ccc",
   },
   button: {
     width: "100%",
     padding: "10px",
-    background: "#007bff",
+    background: "#28a745",
     color: "white",
     border: "none",
-    borderRadius: "5px",
-    cursor: "pointer",
   },
 };
 
-export default Login;
+export default Register;
