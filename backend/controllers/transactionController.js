@@ -109,7 +109,7 @@ exports.filterTransactions = async (req, res) => {
 // DASHBOARD SUMMARY
 exports.getSummary = async (req, res) => {
   try {
-    const transactions = await Transaction.find({ userId: req.user });
+    const transactions = await Transaction.find();
 
     let income = 0;
     let expense = 0;
