@@ -1,6 +1,7 @@
 const Transaction = require("../models/Transaction");
 
-// ADD TRANSACTION
+
+// 🔹 ADD TRANSACTION
 exports.addTransaction = async (req, res) => {
   try {
     const { type, amount, category, date } = req.body;
@@ -10,7 +11,7 @@ exports.addTransaction = async (req, res) => {
       amount,
       category,
       date,
-      userId: req.user, // from middleware
+      userId: req.user.id,   // ✅ FIXED
     });
 
     res.status(201).json({
@@ -23,18 +24,23 @@ exports.addTransaction = async (req, res) => {
   }
 };
 
+
+// 🔹 GET ONLY CURRENT USER TRANSACTIONS
 exports.getTransactions = async (req, res) => {
   try {
     const transactions = await Transaction.find({
-      userId: req.user,
+      userId: req.user.id,   // ✅ FIXED
     }).sort({ date: -1 });
 
     res.json(transactions);
+
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
 
+
+// 🔹 DELETE ONLY OWN DATA
 exports.deleteTransaction = async (req, res) => {
   try {
     const transaction = await Transaction.findById(req.params.id);
@@ -43,8 +49,7 @@ exports.deleteTransaction = async (req, res) => {
       return res.status(404).json({ message: "Transaction not found" });
     }
 
-    // check ownership
-    if (transaction.userId.toString() !== req.user) {
+    if (transaction.userId.toString() !== req.user.id) {  // ✅ FIXED
       return res.status(401).json({ message: "Not authorized" });
     }
 
@@ -57,7 +62,8 @@ exports.deleteTransaction = async (req, res) => {
   }
 };
 
-// UPDATE TRANSACTION
+
+// 🔹 UPDATE ONLY OWN DATA
 exports.updateTransaction = async (req, res) => {
   try {
     const transaction = await Transaction.findById(req.params.id);
@@ -66,8 +72,7 @@ exports.updateTransaction = async (req, res) => {
       return res.status(404).json({ message: "Transaction not found" });
     }
 
-    // check ownership
-    if (transaction.userId.toString() !== req.user) {
+    if (transaction.userId.toString() !== req.user.id) {  // ✅ FIXED
       return res.status(401).json({ message: "Not authorized" });
     }
 
@@ -87,12 +92,13 @@ exports.updateTransaction = async (req, res) => {
   }
 };
 
-// FILTER TRANSACTIONS
+
+// 🔹 FILTER ONLY OWN DATA
 exports.filterTransactions = async (req, res) => {
   try {
     const { type, category } = req.query;
 
-    let filter = { userId: req.user };
+    let filter = { userId: req.user.id };   // ✅ FIXED
 
     if (type) filter.type = type;
     if (category) filter.category = category;
@@ -106,20 +112,20 @@ exports.filterTransactions = async (req, res) => {
   }
 };
 
-// DASHBOARD SUMMARY
+
+// 🔹 SUMMARY (USER-SPECIFIC)
 exports.getSummary = async (req, res) => {
   try {
-    const transactions = await Transaction.find();
+    const transactions = await Transaction.find({
+      userId: req.user.id,   // ✅ FIXED
+    });
 
     let income = 0;
     let expense = 0;
 
     transactions.forEach((t) => {
-      if (t.type === "income") {
-        income += t.amount;
-      } else {
-        expense += t.amount;
-      }
+      if (t.type === "income") income += t.amount;
+      else expense += t.amount;
     });
 
     res.json({

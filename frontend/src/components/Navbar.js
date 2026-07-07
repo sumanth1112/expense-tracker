@@ -3,7 +3,7 @@ import React from "react";
 function Navbar() {
   return (
     <div style={styles.nav}>
-      <h2>💰 Expense Tracker</h2>
+      <h2>Expense Tracker 🚀</h2>
 
       <button
         onClick={() => {
