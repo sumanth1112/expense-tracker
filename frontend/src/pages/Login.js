@@ -12,7 +12,9 @@ function Login() {
       localStorage.setItem("token", res.data.token);
       window.location.href = "/dashboard";
     } catch (err) {
-      alert("Invalid credentials");
+      console.error(err);
+      const message = err.response?.data?.message || err.message || "Invalid credentials";
+      alert(message);
     }
   };
   

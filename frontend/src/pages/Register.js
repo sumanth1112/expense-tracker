@@ -12,7 +12,10 @@ function Register() {
       alert("User registered successfully!");
       window.location.href = "/";
     } catch (err) {
-      alert("Error registering user");
+      console.error(err);
+      const message =
+        err.response?.data?.message || err.message || "Error registering user";
+      alert(message);
     }
   };
 
